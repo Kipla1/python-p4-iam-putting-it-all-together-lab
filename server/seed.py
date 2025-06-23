@@ -41,20 +41,19 @@ with app.app_context():
         users.append(user)
 
     db.session.add_all(users)
+    db.session.commit()  # Commit users so they have IDs
 
     print("Creating recipes...")
     recipes = []
     for i in range(100):
         instructions = fake.paragraph(nb_sentences=8)
-        
+        user = rc(users)
         recipe = Recipe(
             title=fake.sentence(),
             instructions=instructions,
             minutes_to_complete=randint(15,90),
+            user_id=user.id  # Set user_id directly
         )
-
-        recipe.user = rc(users)
-
         recipes.append(recipe)
 
     db.session.add_all(recipes)
