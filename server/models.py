@@ -11,12 +11,10 @@ class User(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
-    _password_hash = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String, nullable=True)
     image_url = db.Column(db.String)
     bio = db.Column(db.String)
-    title = db.Column(db.String)
-    instructions = db.Column(db.String)
-    minutes_to_complete = db.Column(db.Integer)
+    # Removed title, instructions, and minutes_to_complete - these belong to Recipe
 
     # Relationship
     recipes = db.relationship('Recipe', backref='user', lazy=True)
@@ -52,7 +50,7 @@ class Recipe(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
     instructions = db.Column(db.String, nullable=False)
     minutes_to_complete = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Made nullable
 
     @validates('title')
     def validate_title(self, key, title):
